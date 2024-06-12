@@ -101,28 +101,12 @@ public class ContactRepositoryForSqLite : IContactRepositoryForDb
 
     public async Task<IEnumerable<Contact>> GetAllAsync()
     {
-        
-
-        List<Contact> contactsList = new List<Contact>();
         using (var connection = new SQLiteConnection(_connection.ConnectionString))
         {
             await connection.OpenAsync();
             string sql = "SELECT * FROM Contact";
-    
-            using (var command = new SQLiteCommand(sql, connection))
-            using (var reader = await command.ExecuteReaderAsync())
-            {
-                while (await reader.ReadAsync())
-                {
-                    string name = reader.IsDBNull(reader.GetOrdinal("Name")) ? string.Empty : reader.GetString(reader.GetOrdinal("Name"));
-                    string phoneNumber = reader.IsDBNull(reader.GetOrdinal("PhoneNumber")) ? string.Empty : reader.GetString(reader.GetOrdinal("PhoneNumber"));
-                    
-                    contactsList.Add(new Contact(name, phoneNumber));
-                }
-            }
+            return await connection.QueryAsync<Contact>(sql);
         }
-    
-        return contactsList;
     }
     
     
