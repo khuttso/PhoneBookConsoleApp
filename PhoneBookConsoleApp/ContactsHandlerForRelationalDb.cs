@@ -12,9 +12,9 @@ public class ContactsHandlerForRelationalDb : IContactsHandler<Contact>
     ///     Constructor takes connectionString as an argument which creates ContactRepositoryForSqLite object   
     /// </summary>
     /// <param name="connectionString"></param>
-    public ContactsHandlerForRelationalDb(string connectionString)
+    public ContactsHandlerForRelationalDb()
     {
-        _contactRepositoryForSqLite = new ContactRepositoryForSqLite(connectionString);
+        _contactRepositoryForSqLite = new ContactRepositoryForSqLite();
     }
 
     public int NumberOfElements

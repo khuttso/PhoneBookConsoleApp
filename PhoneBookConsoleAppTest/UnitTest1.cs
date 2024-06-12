@@ -8,26 +8,14 @@ using Xunit;
 
 public class UnitTest1
 {
-     private const string _connectionString = "Data Source=C:\\Users\\asusVivo\\DataGripProjects\\PhoneBookApp\\identifier.sqlite";
+    private const string _connectionString = "Data Source=./Data/identifier.sqlite";
 
     private static ContactsHandlerForRelationalDb _contactsHandlerForSQLite =
-        new ContactsHandlerForRelationalDb(_connectionString);
+        new ContactsHandlerForRelationalDb();
     
     private PhoneBook _phoneBook = new PhoneBook(_contactsHandlerForSQLite, new GeorgianNumberValidation());
 
-    // / / / / / // 
-    public void AssertString(string s, string s1)
-    { 
-        if (s != s1) Console.WriteLine("Failed");
-        else Console.WriteLine("Passed");
-    }
-    public void AssertInt(int x, int y)
-    {
-        if (x != y) Console.WriteLine("Failed");
-        else Console.WriteLine("Passed");
-    }
-    // / / // / // // 
-    
+  
     
     /// <summary>
     ///     TestAddContact() - Todo="Tomorrow";
@@ -58,7 +46,8 @@ public class UnitTest1
                 }
             }
         }
-        AssertString(phoneNumberNew, phoneNumber);
+
+        Assert.Equal(phoneNumber, phoneNumberNew);
     }
     
     
@@ -95,7 +84,7 @@ public class UnitTest1
                 }
             }
         }
-        AssertInt(count, 0); 
+        Assert.Equal(0, count); 
     }
     
     
@@ -105,6 +94,7 @@ public class UnitTest1
     /// <summary>
     ///     TestUpdateContact() - Todo - "Tomorrow"
     /// </summary>
+    [Fact]
     public async Task TestUpdateContact()
     {   
         string name = "Luka";
@@ -114,7 +104,7 @@ public class UnitTest1
         _phoneBook.AddContact(name, phoneNumber);
         _phoneBook.Update(name, newPhoneNumber);
 
-        using (var connection = new SQLiteConnection(_connectionString))
+        using (var connection = new SQLiteConnection())
         {
             await connection.OpenAsync();
             string sql = "SELECT PhoneNumber PhoneNumber FROM Contact WHERE Name = @Name";
@@ -132,6 +122,6 @@ public class UnitTest1
                 }
             }
         }
-        AssertString(currentDbData, newPhoneNumber);
+        Assert.Equal(currentDbData, newPhoneNumber);
     }
 }

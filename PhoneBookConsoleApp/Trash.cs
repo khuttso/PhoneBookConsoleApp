@@ -7,7 +7,7 @@ public class Trash
     private const string _connectionString = "Data Source=C:\\Users\\asusVivo\\DataGripProjects\\PhoneBookApp\\identifier.sqlite";
 
     private static ContactsHandlerForRelationalDb _contactsHandlerForSQLite =
-        new ContactsHandlerForRelationalDb(_connectionString);
+        new ContactsHandlerForRelationalDb();
     
     private PhoneBook _phoneBook = new PhoneBook(_contactsHandlerForSQLite, new GeorgianNumberValidation());
 

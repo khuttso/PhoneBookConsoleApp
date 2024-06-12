@@ -9,7 +9,8 @@ public class Program
     public static void Main(string[] args)
     {
         // new ConsoleAppForJsonFile().Run();
+        // contactDB
         
-       new ConsoleAppForRationalDb().Run();
+        new ConsoleAppForRationalDb().Run();
     }
 }

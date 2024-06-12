@@ -14,9 +14,45 @@ public class ContactRepositoryForSqLite : IContactRepositoryForDb
 {
     private readonly IDbConnection _connection;
 
-    public ContactRepositoryForSqLite(string connectionString)
+    public ContactRepositoryForSqLite()
     {
-        _connection = new SQLiteConnection(connectionString);
+        string databasePath = "DatabaseForContacts";
+        // Create the database file if it doesn't exist
+        if (!System.IO.File.Exists(databasePath))
+        {
+            SQLiteConnection.CreateFile(databasePath);
+            Console.WriteLine("Database file created.");
+        }
+        var connectionStringBuilder = new SQLiteConnectionStringBuilder
+        {
+            DataSource = databasePath
+        };
+        string connectionString = connectionStringBuilder.ToString();
+        
+
+        using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+        {
+            _connection = new SQLiteConnection(connectionString);
+            _connection.Open();
+            connection.Open();
+            string s = connection.ConnectionString;
+           
+            
+            string createTableQuery = @"
+                CREATE TABLE IF NOT EXISTS Contact (
+                    Name string PRIMARY KEY,
+                    PhoneNumber string
+                );";
+
+            using (SQLiteCommand command = new SQLiteCommand(createTableQuery, connection))
+            {
+                command.ExecuteNonQuery();
+                Console.WriteLine("Table created or already exists.");
+            }
+            
+
+            _connection = new SQLiteConnection(connectionString);
+        }
     }
 
     public IDbConnection Connection { get { return _connection; } }        
@@ -39,30 +75,55 @@ public class ContactRepositoryForSqLite : IContactRepositoryForDb
 
     
     
+    // public async Task<IEnumerable<Contact>> GetAllAsync()
+    // {
+    //     List<Contact> contactsList = new List<Contact>();
+    //     using (var c = new SQLiteConnection(_connection.ConnectionString))
+    //     {
+    //         await c.OpenAsync();
+    //         string sql = "SELECT * FROM Contact";
+    //
+    //         using (var command = new SQLiteCommand(sql, c))
+    //         using (var reader = await command.ExecuteReaderAsync())
+    //         {
+    //             while (await reader.ReadAsync())
+    //             {
+    //                 Contact cont = new Contact(reader.GetString(reader.GetOrdinal("Name")),
+    //                     reader.GetString(reader.GetOrdinal("PhoneNumber")));
+    //                 
+    //                 contactsList.Add(cont);
+    //             }
+    //         }
+    //     }
+    //
+    //     return contactsList;
+    // }
+
     public async Task<IEnumerable<Contact>> GetAllAsync()
     {
-        List<Contact> contactsList = new List<Contact>();
-        using (var c = new SQLiteConnection(_connection.ConnectionString))
-        {
-            await c.OpenAsync();
-            string sql = "SELECT * FROM Contact";
+        
 
-            using (var command = new SQLiteCommand(sql, c))
+        List<Contact> contactsList = new List<Contact>();
+        using (var connection = new SQLiteConnection(_connection.ConnectionString))
+        {
+            await connection.OpenAsync();
+            string sql = "SELECT * FROM Contact";
+    
+            using (var command = new SQLiteCommand(sql, connection))
             using (var reader = await command.ExecuteReaderAsync())
             {
                 while (await reader.ReadAsync())
                 {
-                    Contact cont = new Contact(reader.GetString(reader.GetOrdinal("Name")),
-                        reader.GetString(reader.GetOrdinal("PhoneNumber")));
+                    string name = reader.IsDBNull(reader.GetOrdinal("Name")) ? string.Empty : reader.GetString(reader.GetOrdinal("Name"));
+                    string phoneNumber = reader.IsDBNull(reader.GetOrdinal("PhoneNumber")) ? string.Empty : reader.GetString(reader.GetOrdinal("PhoneNumber"));
                     
-                    contactsList.Add(cont);
+                    contactsList.Add(new Contact(name, phoneNumber));
                 }
             }
         }
-
+    
         return contactsList;
     }
-
     
     
     public async Task<Contact> GetByNameAsync(string name)
@@ -71,7 +132,7 @@ public class ContactRepositoryForSqLite : IContactRepositoryForDb
         using (var c = new SQLiteConnection(_connection.ConnectionString))
         {
             await c.OpenAsync();
-            string sql = "SELECT * FROM Contact WHERE Name = @nName";
+            string sql = "SELECT * FROM Contact WHERE Name = @Name";
 
             using (var command = new SQLiteCommand(sql, c))
             {
@@ -81,6 +142,7 @@ public class ContactRepositoryForSqLite : IContactRepositoryForDb
                 {
                     while (await reader.ReadAsync())
                     {
+                        Console.WriteLine(reader.GetString(reader.GetOrdinal("Name")));
                         cont = new Contact(reader.GetString(reader.GetOrdinal("Name")),
                             reader.GetString(reader.GetOrdinal("PhoneNumber")));
                     }
