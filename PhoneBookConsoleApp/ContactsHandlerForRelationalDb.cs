@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging;
+
 namespace PhoneBookConsoleApp;
 
 /// <summary>
@@ -7,14 +9,13 @@ public class ContactsHandlerForRelationalDb : IContactsHandler<Contact>
 {
     private readonly ContactRepositoryForSqLite _contactRepositoryForSqLite;
     private int numberOfElements = 0;
-
     /// <summary>
     ///     Constructor takes connectionString as an argument which creates ContactRepositoryForSqLite object   
     /// </summary>
     /// <param name="connectionString"></param>
-    public ContactsHandlerForRelationalDb()
+    public ContactsHandlerForRelationalDb(ILogger<ContactRepositoryForSqLite> logger)
     {
-        _contactRepositoryForSqLite = new ContactRepositoryForSqLite();
+        _contactRepositoryForSqLite = new ContactRepositoryForSqLite(logger);
     }
 
     public int NumberOfElements

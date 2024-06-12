@@ -2,7 +2,11 @@ namespace PhoneBookConsoleAppTest;
 using PhoneBookConsoleApp;
 using Dapper;
 using System.Data.SQLite;
-
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
+using NLog.Config;
+using NLog.Targets;
 
 using Xunit;
 
@@ -10,13 +14,38 @@ public class UnitTest1
 {
     private const string _connectionString = "Data Source=./Data/identifier.sqlite";
 
-    private static ContactsHandlerForRelationalDb _contactsHandlerForSQLite =
-        new ContactsHandlerForRelationalDb();
-    
+    private static ContactsHandlerForRelationalDb _contactsHandlerForSQLite;
+
     private PhoneBook _phoneBook = new PhoneBook(_contactsHandlerForSQLite, new GeorgianNumberValidation());
 
-  
-    
+    public UnitTest1()
+    {
+        var config = new LoggingConfiguration();
+
+        var logfile = new FileTarget("logfile")
+        {
+            FileName = "logfile.txt",
+            Layout = "${longdate} ${level:uppercase=true} ${message} ${exception:format=toString,StackTrace}"
+        };
+        var logconsole = new ConsoleTarget("logconsole");
+
+
+        LogManager.Configuration = config;
+
+        // Create a LoggerFactory and configure it to use NLog
+        using var loggerFactory = LoggerFactory.Create(builder =>
+        {
+            builder.ClearProviders();
+            builder.AddNLog(config);
+        });
+
+        // Create a logger for the HandlerForRationalDatabase class
+        var logger = loggerFactory.CreateLogger<ContactRepositoryForSqLite>();
+
+        _contactsHandlerForSQLite = new ContactsHandlerForRelationalDb(logger);
+    }
+
+
     /// <summary>
     ///     TestAddContact() - Todo="Tomorrow";
     /// </summary>

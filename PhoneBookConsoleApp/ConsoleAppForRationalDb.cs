@@ -1,4 +1,6 @@
 using System.Runtime.InteropServices;
+using Microsoft.Extensions.Logging;
+
 namespace PhoneBookConsoleApp;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +13,7 @@ public class ConsoleAppForRationalDb : IConsoleApp
     // private const string connectionString = "Data Source=.\\Data\\identifier.sqlite";
     private ContactsHandlerForRelationalDb _handlerForRelationalDb;
 
-    public ConsoleAppForRationalDb()
+    public ConsoleAppForRationalDb(ILogger<ContactRepositoryForSqLite> logger)
     {
         // Console.WriteLine(Directory.GetCurrentDirectory());
         // var builder = new ConfigurationBuilder()
@@ -19,7 +21,7 @@ public class ConsoleAppForRationalDb : IConsoleApp
         //     .AddJsonFile("C:\\Users\\asusVivo\\RiderProjects\\PhoneBookConsoleApp\\PhoneBookConsoleApp\\appsettings.json", optional: false, reloadOnChange: true);
         // IConfiguration configuration = builder.Build();
         // string connectionString = configuration.GetConnectionString("DefaultConnection");
-        _handlerForRelationalDb = new ContactsHandlerForRelationalDb();
+        _handlerForRelationalDb = new ContactsHandlerForRelationalDb(logger);
         
         _phoneBook = new PhoneBook(_handlerForRelationalDb, new GeorgianNumberValidation());
     }

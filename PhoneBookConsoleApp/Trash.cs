@@ -4,10 +4,11 @@ using System.Data.SQLite;
 
 public class Trash
 {
+    // Class Trash - Just for testing something new.
     private const string _connectionString = "Data Source=C:\\Users\\asusVivo\\DataGripProjects\\PhoneBookApp\\identifier.sqlite";
 
     private static ContactsHandlerForRelationalDb _contactsHandlerForSQLite =
-        new ContactsHandlerForRelationalDb();
+        new ContactsHandlerForRelationalDb(null);
     
     private PhoneBook _phoneBook = new PhoneBook(_contactsHandlerForSQLite, new GeorgianNumberValidation());
 

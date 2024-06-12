@@ -12,8 +12,12 @@
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0-preview.4.24266.19" />
       <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="6.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="NLog" Version="5.3.2" />
+      <PackageReference Include="NLog.Extensions" Version="1.0.1" />
+      <PackageReference Include="NLog.Extensions.Logging" Version="5.3.11" />
+      <PackageReference Include="NLog.Targets.TextWriter" Version="1.2.0" />
       <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
         
         <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="6.0.0" />

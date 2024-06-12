@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using Dapper;
 using System.Data;
 using System.Data.SQLite;
+using NLog;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// 
@@ -13,9 +15,11 @@ using System.Data.SQLite;
 public class ContactRepositoryForSqLite : IContactRepositoryForDb
 {
     private readonly IDbConnection _connection;
+    private ILogger<ContactRepositoryForSqLite> _logger;
 
-    public ContactRepositoryForSqLite()
+    public ContactRepositoryForSqLite(ILogger<ContactRepositoryForSqLite> logger)
     {
+        _logger = logger;
         string databasePath = "DatabaseForContacts";
         // Create the database file if it doesn't exist
         if (!System.IO.File.Exists(databasePath))
