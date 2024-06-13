@@ -150,7 +150,7 @@ public class ContactRepositoryForSqLite : IContactRepositoryForDb
         using (var c = new SQLiteConnection(_connection.ConnectionString))
         {
             await c.OpenAsync();
-            string sql = "DELETE FROM Contacts Where Name = @Name";
+            string sql = "DELETE FROM Contact Where Name = @Name";
 
             using (var command = new SQLiteCommand(sql, c))
             {

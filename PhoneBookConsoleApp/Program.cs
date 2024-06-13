@@ -36,6 +36,6 @@ public class Program
         });
 
         var logger = loggerFactory.CreateLogger<ContactRepositoryForSqLite>();
-        new ConsoleAppForRationalDb(logger).Run();
+        new ConsoleAppForRelationalDb(logger).Run();
     }
 }

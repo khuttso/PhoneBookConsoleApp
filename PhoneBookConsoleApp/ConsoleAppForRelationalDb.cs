@@ -6,14 +6,14 @@ using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration;
 using System.IO;
-public class ConsoleAppForRationalDb : IConsoleApp
+public class ConsoleAppForRelationalDb : IConsoleApp
 {
     private readonly PhoneBook _phoneBook;
     // private const string connectionString = "#DataSourceSettings#\n#LocalDataSource: identifier.sqlite\n#BEGIN#\n<data-source source=\"LOCAL\" name=\"identifier.sqlite\" uuid=\"e3e37ec3-1c75-468d-96ac-d1381f9159eb\"><database-info product=\"SQLite\" version=\"3.45.1\" jdbc-version=\"4.2\" driver-name=\"SQLite JDBC\" driver-version=\"3.45.1.0\" dbms=\"SQLITE\" exact-version=\"3.45.1\" exact-driver-version=\"3.45\"><identifier-quote-string>&quot;</identifier-quote-string></database-info><case-sensitivity plain-identifiers=\"mixed\" quoted-identifiers=\"mixed\"/><driver-ref>sqlite.xerial</driver-ref><synchronize>true</synchronize><jdbc-driver>org.sqlite.JDBC</jdbc-driver><jdbc-url>jdbc:sqlite:identifier.sqlite</jdbc-url><secret-storage>master_key</secret-storage><auth-provider>no-auth</auth-provider><schema-mapping><introspection-scope><node kind=\"schema\" qname=\"@\"/></introspection-scope></schema-mapping><working-dir>$ProjectFileDir$</working-dir></data-source>\n#END#\n\n";
     // private const string connectionString = "Data Source=.\\Data\\identifier.sqlite";
     private ContactsHandlerForRelationalDb _handlerForRelationalDb;
 
-    public ConsoleAppForRationalDb(ILogger<ContactRepositoryForSqLite> logger)
+    public ConsoleAppForRelationalDb(ILogger<ContactRepositoryForSqLite> logger)
     {
         // Console.WriteLine(Directory.GetCurrentDirectory());
         // var builder = new ConfigurationBuilder()
