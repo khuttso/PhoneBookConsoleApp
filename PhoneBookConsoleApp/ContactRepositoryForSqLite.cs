@@ -56,6 +56,7 @@ public class ContactRepositoryForSqLite : IContactRepositoryForDb
             
 
             _connection = new SQLiteConnection(connectionString);
+            _logger.LogInformation("Connection is established");
         }
     }
 
@@ -74,37 +75,15 @@ public class ContactRepositoryForSqLite : IContactRepositoryForDb
 
                 await command.ExecuteNonQueryAsync();
             }
+            _logger.LogInformation($"Contact with name:{contact.Name} and phone number:{contact.PhoneNumber} is added into the PhoneBook");
         }
     }
-
     
     
-    // public async Task<IEnumerable<Contact>> GetAllAsync()
-    // {
-    //     List<Contact> contactsList = new List<Contact>();
-    //     using (var c = new SQLiteConnection(_connection.ConnectionString))
-    //     {
-    //         await c.OpenAsync();
-    //         string sql = "SELECT * FROM Contact";
-    //
-    //         using (var command = new SQLiteCommand(sql, c))
-    //         using (var reader = await command.ExecuteReaderAsync())
-    //         {
-    //             while (await reader.ReadAsync())
-    //             {
-    //                 Contact cont = new Contact(reader.GetString(reader.GetOrdinal("Name")),
-    //                     reader.GetString(reader.GetOrdinal("PhoneNumber")));
-    //                 
-    //                 contactsList.Add(cont);
-    //             }
-    //         }
-    //     }
-    //
-    //     return contactsList;
-    // }
 
     public async Task<IEnumerable<Contact>> GetAllAsync()
     {
+        _logger.LogInformation("Getting all data from database");
         using (var connection = new SQLiteConnection(_connection.ConnectionString))
         {
             await connection.OpenAsync();
@@ -137,6 +116,7 @@ public class ContactRepositoryForSqLite : IContactRepositoryForDb
                 }
             }
         }
+        _logger.LogInformation($"Getting contact with name:{name}");
 
         
         return cont;
@@ -159,12 +139,14 @@ public class ContactRepositoryForSqLite : IContactRepositoryForDb
                 await command.ExecuteNonQueryAsync();
             }
         }
+        _logger.LogInformation($"Updating contact with name:{contact.Name} and setting new phone number:{contact.PhoneNumber}");
     }
 
     
     
     public async Task DeleteAsync(string name)
     {
+        
         using (var c = new SQLiteConnection(_connection.ConnectionString))
         {
             await c.OpenAsync();
@@ -177,6 +159,7 @@ public class ContactRepositoryForSqLite : IContactRepositoryForDb
                 await command.ExecuteNonQueryAsync();
             }
         }
+        _logger.LogInformation($"Removing data with name:{name}");
     }
 
     public async Task DeleteAllAsync()
@@ -191,5 +174,6 @@ public class ContactRepositoryForSqLite : IContactRepositoryForDb
                 await command.ExecuteNonQueryAsync();
             }
         }
+        _logger.LogInformation("Removing all data from database");
     }
 }
